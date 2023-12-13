@@ -2,7 +2,7 @@
 #include<iostream>
 #include<chrono>
 #include<thread>
-
+//////////////////////////////////////////
 constexpr gpio_num_t g_ledRed = GPIO_NUM_45;
 constexpr gpio_num_t g_ledGreen = GPIO_NUM_17;
 constexpr gpio_num_t g_ledBlue = GPIO_NUM_46;
@@ -36,14 +36,13 @@ while (true)
 {
     // Check if any of the buttons are pressed
     
-    if(gpio_get_level(g_Button1)){
-        std::cout<<"Button 1 Pressed\n";
+    if(gpio_get_level(g_Button1)==1){
         gpio_set_level(g_ledRed, 0);
     }
-    if(gpio_get_level(g_Button2)){
+    if(gpio_get_level(g_Button2)==1){
         gpio_set_level(g_ledBlue, 0);
     }
-    if(gpio_get_level(g_Button3)){
+    if(gpio_get_level(g_Button3)==0){
         gpio_set_level(g_ledYellow, 0);
     }
     else{
