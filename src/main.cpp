@@ -31,79 +31,91 @@ extern "C" void app_main(void)
 
     gpio_config(&io_conf);
     gpio_config(&but_conf);
-    enum LED
+    enum state
     {
-        G = 0,
-        Y = 1,
-        R = 2,
-        B = 3,
+        A,
+        B,
+        C,
+        D
     };
+    state stav = A;
 
-    LED state = G;
     while (true)
     {
-
-        if (gpio_get_level(g_Button1) == 1 && gpio_get_level(g_Button2) == 1)
+        switch (stav)
         {
-            gpio_set_level(g_ledBlue, 0);
-            gpio_set_level(g_ledGreen, 1);
-            gpio_set_level(g_ledYellow, 0);
-            gpio_set_level(g_ledRed, 0);
-            state = G;
-        }
-        if (gpio_get_level(g_Button2) == 1 && gpio_get_level(g_Button1) == 0)
-        {
-            state = Y;
-            gpio_set_level(g_ledBlue, 0);
-            gpio_set_level(g_ledGreen, 0);
-            gpio_set_level(g_ledYellow, 1);
-            gpio_set_level(g_ledRed, 0);
-        }
-        if (gpio_get_level(g_Button3) == 0 && state == Y)
-        {
-            while (gpio_get_level(g_Button3) == 0 && state == Y)
+        case A:
+            if (gpio_get_level(g_Button3) == 0)
             {
-                gpio_set_level(g_ledBlue, 0);
-                gpio_set_level(g_ledGreen, 0);
-                gpio_set_level(g_ledYellow, 1);
-                gpio_set_level(g_ledRed, 0);
-            }
-        }
-        if (gpio_get_level(g_Button2) == 0 && gpio_get_level(g_Button1) == 1)
-        {
-            state = R;
-            gpio_set_level(g_ledBlue, 0);
-            gpio_set_level(g_ledGreen, 0);
-            gpio_set_level(g_ledYellow, 0);
-            gpio_set_level(g_ledRed, 1);
-        }
-        if (gpio_get_level(g_Button3) == 0 && state == R)
-        {
-            while (gpio_get_level(g_Button3) == 0 && state == R)
-            {
-                gpio_set_level(g_ledBlue, 0);
-                gpio_set_level(g_ledGreen, 0);
-                gpio_set_level(g_ledYellow, 0);
                 gpio_set_level(g_ledRed, 1);
             }
-        }
-        if (gpio_get_level(g_Button2) == 0 && gpio_get_level(g_Button1) == 0)
-        {
-            state = B;
-            gpio_set_level(g_ledBlue, 1);
+            if (gpio_get_level(g_Button1) == 0)
+            {
+                stav = B;
+            }
+            if (gpio_get_level(g_Button2) == 0)
+            {
+                stav = C;
+            }
+            break;
+        case B:
+            gpio_set_level(g_ledYellow, 0);
+            gpio_set_level(g_ledBlue, 0);
+            gpio_set_level(g_ledRed, 0);
+            if (gpio_get_level(g_Button3) == 0)
+            {
+                gpio_set_level(g_ledGreen, 1);
+            }
+            if (gpio_get_level(g_Button2) == 0)
+            {
+                stav = D;
+            }
+            if (gpio_get_level(g_Button1) == 0)
+            {
+                stav = A;
+            }
+
+            break;
+        case D:
+            gpio_set_level(g_ledGreen, 0);
+            gpio_set_level(g_ledBlue, 0);
+            gpio_set_level(g_ledRed, 0);
+            if (gpio_get_level(g_Button3) == 0)
+            {
+                gpio_set_level(g_ledYellow, 1);
+            }
+            if (gpio_get_level(g_Button2) == 0)
+            {
+                stav = B;
+            }
+            if (gpio_get_level(g_Button1) == 0)
+            {
+                stav = C;
+            }
+            break;
+        case C:
             gpio_set_level(g_ledGreen, 0);
             gpio_set_level(g_ledYellow, 0);
             gpio_set_level(g_ledRed, 0);
-        }
-        if (gpio_get_level(g_Button3) == 0 && state == B)
-        {
-            while (gpio_get_level(g_Button3) == 0 && state == B)
+            if (gpio_get_level(g_Button2) == 0)
+            {
+                stav = A;
+            }
+            if (gpio_get_level(g_Button2) == 0)
             {
                 gpio_set_level(g_ledBlue, 1);
-                gpio_set_level(g_ledGreen, 0);
-                gpio_set_level(g_ledYellow, 0);
-                gpio_set_level(g_ledRed, 0);
             }
+
+            break;
+        default:
+            break;
         }
+
+        //     if(gpio_get_level(g_Button1)==0 && (state ==0)){
+        //         gpio_set_level(g_ledGreen,0);
+        //     }
+        //     else{
+        //         gpio_set_level(g_ledGreen,1);
+        //     }
     }
 }
